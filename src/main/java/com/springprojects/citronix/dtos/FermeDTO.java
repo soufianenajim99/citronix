@@ -14,7 +14,6 @@ public class FermeDTO {
     private String nom;
     private String localisation;
     private double superficie;
-    private double finalScore;
     private LocalDate dateCreation;
     private Set<ChampDTO> champs;
 }
