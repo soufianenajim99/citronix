@@ -25,7 +25,6 @@ public class Ferme {
     private String nom;
     private String localisation;
     private double superficie;
-    private double finalScore;
     private LocalDate dateCreation;
     @OneToMany(mappedBy = "ferme", cascade = CascadeType.ALL)
     private Set<Champ> champs;
