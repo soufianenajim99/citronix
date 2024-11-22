@@ -26,4 +26,9 @@ public class GlobalExceptionHandler {
         return ResponseUtil.error(Arrays.asList(ex.getMessage()), "Response data not found", 204, request.getRequestURI());
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ApiResponse<Object> handleResponseBuisinessException(ResponseNotFoundException ex, HttpServletRequest request) {
+        return ResponseUtil.error(Arrays.asList(ex.getMessage()), "Buisiness Logic Exception", 204, request.getRequestURI());
+    }
+
 }
