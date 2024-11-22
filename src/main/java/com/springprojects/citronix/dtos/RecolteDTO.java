@@ -20,6 +20,6 @@ public class RecolteDTO {
     @NotNull(message = "La date de récolte est obligatoire")
     @PastOrPresent(message = "La date de récolte doit être dans le passé ou aujourd'hui")
     private LocalDate dateRecolte;
-    private Set<String> recolteDetailsIds;
-    private Set<String> venteDetailsIds;
+    private Set<DetailRecoltesDTO> recolteDetails;
+    private Set<VenteDTO> venteDetails;
 }

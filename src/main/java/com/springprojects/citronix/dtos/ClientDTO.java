@@ -18,5 +18,5 @@ public class ClientDTO {
 
     @Email(message = "L'adresse email du client doit être valide")
     private String email;
-    private Set<String> venteDetailsIds;
+    private Set<VenteDTO> venteDetails;
 }

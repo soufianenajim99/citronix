@@ -52,7 +52,7 @@ public class FermeController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<FermeDTO>>> getAllFermes(@Validated HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<List<FermeDTO>>> getAllFermes( HttpServletRequest request) {
         List<FermeDTO> fermes = fermeService.getAllFermes();
         return ResponseEntity.ok(ResponseUtil.success(fermes, "Fermes List retrived successfully", request.getRequestURI()));
 

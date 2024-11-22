@@ -13,11 +13,9 @@ import java.util.UUID;
 @Data
 public class VenteDTO {
     private UUID id;
-    @NotNull(message = "Un client doit être associé à la vente")
-    private String clientId;
 
-    @NotNull(message = "Une récolte doit être associée à la vente")
-    private String recolteId;
+    private ClientDTO client;
+    private RecolteDTO recolte;
 
     @DecimalMin(value = "0.1", message = "La quantité vendue doit être supérieure à 0,1 kg")
     private double quantite;

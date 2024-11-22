@@ -25,11 +25,12 @@ public class ChampServiceImpl implements ChampService {
 
     @Override
     public ChampDTO createChamp(ChampDTO champDTO) {
-
-        UUID fermeId = UUID.fromString(champDTO.getFermeId());
+        // Validate and fetch the associated Ferme
+        UUID fermeId = champDTO.getFerme().getId(); // Ferme ID now comes from ChampDTO's Ferme object
         Ferme ferme = fermeRepository.findById(fermeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ferme introuvable avec l'ID : " + fermeId));
 
+        // Calculate total superficie and validate against the Ferme's superficie
         double superficieTotaleChamps = champRepository.findByFermeId(fermeId).stream()
                 .mapToDouble(Champ::getSuperficie)
                 .sum() + champDTO.getSuperficie();
@@ -37,37 +38,44 @@ public class ChampServiceImpl implements ChampService {
             throw new BusinessException("La superficie totale des champs dépasse celle de la ferme.");
         }
 
-        // Vérifier le nombre maximal de champs
+        // Validate the maximum number of Champs allowed in the Ferme
         long nombreDeChamps = champRepository.countByFermeId(fermeId);
         if (nombreDeChamps >= 10) {
             throw new BusinessException("Une ferme ne peut pas contenir plus de 10 champs.");
         }
 
-        Champ champ = champMapper.champDtoToChamp(champDTO);
-        champ.setFerme(ferme); // Associer la ferme
+        // Build a new ChampDTO with the associated Ferme
+        ChampDTO updatedChampDTO = champDTO.withFermeId(fermeId.toString());
+
+        // Map to Champ entity and save
+        Champ champ = champMapper.champDtoToChamp(updatedChampDTO);
+        champ.setFerme(ferme); // Explicitly set the Ferme
         Champ savedChamp = champRepository.save(champ);
+
         return champMapper.champToChampDto(savedChamp);
     }
 
     @Override
     public ChampDTO updateChamp(UUID id, ChampDTO champDTO) {
-        // Trouver le champ existant
-        Champ champ = champRepository.findById(id)
+        // Fetch the existing Champ
+        Champ existingChamp = champRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Champ introuvable avec l'ID : " + id));
 
-        // Vérifier les nouvelles contraintes si la superficie change
-        double nouvelleSuperficieTotale = champRepository.findByFermeId(champ.getFerme().getId()).stream()
-                .filter(existingChamp -> !existingChamp.getId().equals(id)) // Exclure le champ actuel
+        // Validate new superficie constraints if it changes
+        double nouvelleSuperficieTotale = champRepository.findByFermeId(existingChamp.getFerme().getId()).stream()
+                .filter(champ -> !champ.getId().equals(id)) // Exclude the current Champ
                 .mapToDouble(Champ::getSuperficie)
                 .sum() + champDTO.getSuperficie();
-        if (nouvelleSuperficieTotale >= champ.getFerme().getSuperficie()) {
+        if (nouvelleSuperficieTotale >= existingChamp.getFerme().getSuperficie()) {
             throw new BusinessException("La nouvelle superficie totale des champs dépasse celle de la ferme.");
         }
 
-        // Mettre à jour les champs du champ existant
-        champ.setNom(champDTO.getNom());
-        champ.setSuperficie(champDTO.getSuperficie());
-        Champ updatedChamp = champRepository.save(champ);
+        // Update Champ fields
+        existingChamp.setNom(champDTO.getNom());
+        existingChamp.setSuperficie(champDTO.getSuperficie());
+
+        // Save the updated Champ and return the DTO
+        Champ updatedChamp = champRepository.save(existingChamp);
         return champMapper.champToChampDto(updatedChamp);
     }
 
