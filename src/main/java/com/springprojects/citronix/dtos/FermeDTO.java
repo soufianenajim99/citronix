@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+
 @Builder
 @Data
 public class FermeDTO {
@@ -24,6 +25,5 @@ public class FermeDTO {
     private double superficie;
     @PastOrPresent(message = "Creation date must be in the past or present")
     private LocalDate dateCreation;
-    private Set<String> champsIds;
-
+    private Set<ChampDTO> champs;
 }

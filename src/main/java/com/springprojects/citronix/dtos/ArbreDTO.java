@@ -20,6 +20,16 @@ public class ArbreDTO {
     @NotNull(message = "L'age de L'arbre doit être non null ")
     private int age;
     @NotNull(message = "L'arbre doit être associé à un champ")
-    private String champId;
-    private Set<String> recoltedetailsIds;
+    private ChampDTO champ;
+    private Set<DetailRecoltes> recoltedetails;
+
+    public ArbreDTO withChampId(String champId) {
+        return ArbreDTO.builder()
+                .id(this.id)
+                .dateCreation(this.dateCreation)
+                .age(this.age)
+                .champ(ChampDTO.builder().id(UUID.fromString(champId)).build())
+                .recoltedetails(this.recoltedetails)
+                .build();
+    }
 }

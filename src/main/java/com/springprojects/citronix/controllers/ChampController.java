@@ -9,7 +9,6 @@ import com.springprojects.citronix.services.ChampService;
 import com.springprojects.citronix.utils.ApiResponse;
 import com.springprojects.citronix.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,15 +29,16 @@ public class ChampController {
     public ResponseEntity<ApiResponse<ChampDTO>> createChamp(
             @Validated @RequestBody ChampDTO champDTO,
             HttpServletRequest request) {
-        // Fetch the Ferme using the provided fermeId
-        Ferme ferme = fermeRepository.findById(UUID.fromString(champDTO.getFermeId()))
-                .orElseThrow(() -> new ResourceNotFoundException("Ferme introuvable avec l'ID : " + champDTO.getFermeId()));
+        // Validate and fetch the Ferme using the provided ferme ID
+        UUID fermeId = champDTO.getFerme().getId();
+        fermeRepository.findById(fermeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ferme introuvable avec l'ID : " + fermeId));
 
-        // Set the fetched Ferme in the ChampDTO
-        champDTO.setFermeId(String.valueOf(ferme.getId())); // Assuming FermeDTO has a constructor or builder
+        // Use withFermeId to associate the Ferme with ChampDTO
+        ChampDTO updatedChampDTO = champDTO.withFermeId(fermeId.toString());
 
-        // Create the champ
-        ChampDTO createdChamp = champService.createChamp(champDTO);
+        // Call the service to create the Champ
+        ChampDTO createdChamp = champService.createChamp(updatedChampDTO);
         return ResponseEntity.ok(ResponseUtil.success(createdChamp, "Champ créé avec succès", request.getRequestURI()));
     }
 
@@ -47,6 +47,7 @@ public class ChampController {
             @Validated @PathVariable UUID id,
             @RequestBody ChampDTO champDTO,
             HttpServletRequest request) {
+        // Pass the DTO directly to the service for updating
         ChampDTO updatedChamp = champService.updateChamp(id, champDTO);
         return ResponseEntity.ok(ResponseUtil.success(updatedChamp, "Champ mis à jour avec succès", request.getRequestURI()));
     }
@@ -55,6 +56,7 @@ public class ChampController {
     public ResponseEntity<ApiResponse<String>> deleteChamp(
             @Validated @PathVariable UUID id,
             HttpServletRequest request) {
+        // Delete the Champ by ID
         champService.deleteChamp(id);
         return ResponseEntity.ok(ResponseUtil.success("Champ supprimé avec succès", request.getRequestURI()));
     }
@@ -63,12 +65,14 @@ public class ChampController {
     public ResponseEntity<ApiResponse<ChampDTO>> getChampById(
             @Validated @PathVariable UUID id,
             HttpServletRequest request) {
+        // Retrieve a single Champ by ID
         ChampDTO champDTO = champService.getChampById(id);
         return ResponseEntity.ok(ResponseUtil.success(champDTO, "Champ récupéré avec succès", request.getRequestURI()));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ChampDTO>>> getAllChamps(HttpServletRequest request) {
+        // Retrieve all Champs
         List<ChampDTO> champs = champService.getAllChamps();
         return ResponseEntity.ok(ResponseUtil.success(champs, "Liste des champs récupérée avec succès", request.getRequestURI()));
     }
