@@ -10,7 +10,17 @@ public class ResponseUtil {
         response.setMessage(message);
         response.setData(data);
         response.setErrors(null);
-        response.setErrorCode(0); // No error
+        response.setErrorCode(0);
+        response.setTimestamp(System.currentTimeMillis());
+        response.setPath(path);
+        return response;
+    }
+    public static <T> ApiResponse<T> success( String message, String path) {
+        ApiResponse<T> response = new ApiResponse<>();
+        response.setSuccess(true);
+        response.setMessage(message);
+        response.setErrors(null);
+        response.setErrorCode(0);
         response.setTimestamp(System.currentTimeMillis());
         response.setPath(path);
         return response;
