@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface FermeRepository extends JpaRepository<Ferme, UUID> {
+public interface FermeRepository extends JpaRepository<Ferme, Long>,FermeRepositoryCustom {
 }

@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface FermeService {
     FermeDTO createFerme(FermeDTO fermeDTO);
-    FermeDTO updateFerme(UUID id, FermeDTO fermeDTO);
-    void deleteFerme(UUID id);
-    FermeDTO getFermeById(UUID id);
+    FermeDTO updateFerme(Long id, FermeDTO fermeDTO);
+    void deleteFerme(Long id);
+    FermeDTO getFermeById(Long id);
     List<FermeDTO> getAllFermes();
 }

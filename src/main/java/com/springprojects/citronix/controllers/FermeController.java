@@ -13,14 +13,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/fermes")
 @RequiredArgsConstructor
+
 public class FermeController {
     private final FermeService fermeService;
-    private final FermeMapper fermeMapper;
+
 
 
     @PostMapping
@@ -30,14 +31,14 @@ public class FermeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<FermeDTO>> updateFerme(@Validated @PathVariable UUID id, @RequestBody FermeDTO fermeDTO,HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<FermeDTO>> updateFerme(@Validated @PathVariable Long id, @RequestBody FermeDTO fermeDTO,HttpServletRequest request) {
         FermeDTO updatedFerme = fermeService.updateFerme(id, fermeDTO);
         return ResponseEntity.ok(ResponseUtil.success(updatedFerme, "Ferme updated successfully", request.getRequestURI()));
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<FermeDTO>> deleteFerme(@Validated @PathVariable UUID id,HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<FermeDTO>> deleteFerme(@Validated @PathVariable Long id,HttpServletRequest request) {
          fermeService.deleteFerme(id);
         return ResponseEntity.ok(ResponseUtil.success( "Ferme Deleted successfully", request.getRequestURI()));
 
@@ -45,7 +46,7 @@ public class FermeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<FermeDTO>> getFermeById(@Validated @PathVariable UUID id,HttpServletRequest request) {
+    public ResponseEntity<ApiResponse<FermeDTO>> getFermeById(@Validated @PathVariable Long id,HttpServletRequest request) {
         FermeDTO fermeDTO = fermeService.getFermeById(id);
         return ResponseEntity.ok(ResponseUtil.success(fermeDTO, "Ferme retrived successfully", request.getRequestURI()));
 
