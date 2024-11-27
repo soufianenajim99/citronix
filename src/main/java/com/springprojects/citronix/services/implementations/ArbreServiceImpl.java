@@ -29,8 +29,9 @@ public class ArbreServiceImpl implements ArbreService {
     @Transactional
     @Override
     public ArbreDTO createArbre(ArbreDTO arbreDTO) {
+//        System.out.println("Received dateDePlantation: " + arbreDTO.dateCreation());
         Champ champ = champRepository.findById(Long.valueOf(arbreDTO.champId()))
-                .orElseThrow(() -> new CustomNotFoundException("Field not found with ID: " + arbreDTO.champId()));
+                .orElseThrow(() -> new CustomNotFoundException("Champ not found with ID: " + arbreDTO.champId()));
 
         validateTreeSpacing(champ);
         Arbre arbre = ArbreMapper.INSTANCE.toEntity(arbreDTO);
@@ -47,7 +48,7 @@ public class ArbreServiceImpl implements ArbreService {
         long currentTreeCount = arbreRepository.countByChampId(champ.getId());
 
         if (currentTreeCount >= maxTrees) {
-            throw new ValidationException("The field exceeds the maximum tree density of 100 trees per hectare.");
+            throw new ValidationException("The Champ depasser the maximum tree density of 100 trees per hectare.");
         }
     }
 
@@ -65,7 +66,7 @@ public class ArbreServiceImpl implements ArbreService {
     @Override
     public ArbreDTO getArbreById(Long id) {
         Arbre arbre = arbreRepository.findById(id)
-                .orElseThrow(() -> new CustomNotFoundException("Tree not found with ID: " + id));
+                .orElseThrow(() -> new CustomNotFoundException("Arbre not found with ID: " + id));
         return ArbreMapper.INSTANCE.toDTO(arbre);
     }
 
@@ -73,14 +74,14 @@ public class ArbreServiceImpl implements ArbreService {
     @Override
     public ArbreDTO updateArbre(Long id, ArbreDTO arbreDTO) {
         Arbre existingArbre = arbreRepository.findById(id)
-                .orElseThrow(() -> new CustomNotFoundException("Tree not found with ID: " + id));
+                .orElseThrow(() -> new CustomNotFoundException("Arbre not found with ID: " + id));
 
         Champ champ = champRepository.findById(Long.valueOf(arbreDTO.champId()))
-                .orElseThrow(() -> new CustomNotFoundException("Field not found with ID: " + arbreDTO.champId()));
+                .orElseThrow(() -> new CustomNotFoundException("Champ not found with ID: " + arbreDTO.champId()));
 
         validateTreeSpacing(champ);
 
-        existingArbre.setDateDePlantation(arbreDTO.dateCreation());
+        existingArbre.setDateDePlantation(arbreDTO.dateDePlantation());
         existingArbre.setChamp(champ);
         existingArbre.setAge(calculateAge(existingArbre.getDateDePlantation()));
 
@@ -93,7 +94,7 @@ public class ArbreServiceImpl implements ArbreService {
     @Override
     public void deleteArbre(Long id) {
         Arbre arbre = arbreRepository.findById(id)
-                .orElseThrow(() -> new CustomNotFoundException("Tree not found with ID: " + id));
+                .orElseThrow(() -> new CustomNotFoundException("Arbre not found with ID: " + id));
         arbreRepository.delete(arbre);
     }
 

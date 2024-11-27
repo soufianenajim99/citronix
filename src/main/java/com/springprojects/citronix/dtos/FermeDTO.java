@@ -22,22 +22,4 @@ public record FermeDTO(
 }
 
 
-//@Builder
-//@Data
-//public class FermeDTO {
-//    private UUID id;
-//
-//    @NotBlank(message = "Ferme name cannot be blank")
-//    private String nom;
-//
-//    @NotBlank(message = "Localisation cannot be blank")
-//    private String localisation;
-//
-//    @DecimalMin(value = "1", message = "Ferme surface must be greater than 1 hectare")
-//    private double superficie;
-//
-//    @PastOrPresent(message = "Creation date must be in the past or present")
-//    private LocalDate dateCreation;
-//
-//    private Set<ChampDTO> champs;
-//}
+
