@@ -1,7 +1,12 @@
 package com.springprojects.citronix.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,25 +14,34 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Table(name = "ventes")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vente {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    Client client;
-
-    @ManyToOne
-    @JoinColumn(name = "recolte_id")
-    Recolte recolte;
-
-    private double quantite;
+    @Positive(message = "Le prix unitaire doit être supérieur à 0")
     private double prixUnitaire;
-    private LocalDate dateVente;
 
+    @Positive(message = "La quantité doit être supérieure à 0")
+    private double quantite;
+
+    @Column(nullable = false)
+    private double revenu;
+
+    @NotNull(message = "La date est obligatoire")
+    @FutureOrPresent(message = "La date ne peut pas être dans le passé")
+    private LocalDate date;
+
+    @NotBlank(message = "Le nom du client est obligatoire")
+    private String client;
+
+    @OneToOne
+    @JoinColumn(name = "recolte_id")
+    private Recolte recolte;
 }
+

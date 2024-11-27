@@ -6,12 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface ArbreRepository extends JpaRepository<Arbre, UUID> {
-//    List<Arbre> findByChampId(UUID champId);
+public interface ArbreRepository extends JpaRepository<Arbre, Long> {
+    long countByChampId(Long idChamp);
 
-    long countByChampId(UUID champId);
+    List<Arbre> findByChampId(Long idChamp);
 
-//    List<Arbre> findByChampIdAndRecoltedetailsIdsIsEmpty(UUID champId);
-//
-//    List<Arbre> findByAgeGreaterThan(int age);
 }

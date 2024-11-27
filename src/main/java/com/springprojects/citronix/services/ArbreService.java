@@ -7,9 +7,10 @@ import java.util.UUID;
 
 public interface ArbreService {
     ArbreDTO createArbre(ArbreDTO arbreDTO);
-    ArbreDTO updateArbre(UUID id, ArbreDTO arbreDTO);
-    void deleteArbre(UUID id);
-    ArbreDTO getArbreById(UUID id);
+    ArbreDTO updateArbre(Long id, ArbreDTO arbreDTO);
+    void deleteArbre(Long id);
+    ArbreDTO getArbreById(Long id);
     List<ArbreDTO> getAllArbres();
+    List<ArbreDTO> getArbresByChamp(Long champId);
 
 }

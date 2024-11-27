@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface RecolteService {
     RecolteDTO createRecolte(RecolteDTO recolteDTO);
-    RecolteDTO updateRecolte(UUID id, RecolteDTO recolteDTO);
-    void deleteRecolte(UUID id);
-    RecolteDTO getRecolteById(UUID id);
+    RecolteDTO updateRecolte(Long id, RecolteDTO recolteDTO);
+    void deleteRecolte(Long id);
+    RecolteDTO getRecolteById(Long id);
     List<RecolteDTO> getAllRecoltes();
 }
