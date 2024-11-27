@@ -57,17 +57,29 @@ public class RecolteServiceImpl implements RecolteService {
         double totalQuantite = 0.0;
 
         // Traiter chaque détail de récolte d'arbre
-        for (DetailRecolteArbre detail : recolteDTO.recolteDetails()) {
-            Arbre arbre = arbreRepository.findById(detail.getArbre().getId())
-                    .orElseThrow(() -> new CustomNotFoundException("Arbre non trouvé avec l'ID : " + detail.getArbre().getId()));
+        // Ensure that you are properly accessing the details and related objects from RecolteDTO and the Recolte entity.
 
-            double productiviteArbre = arbre.calculerProductivite();
-            detail.setArbre(arbre);
-            detail.setRecolte(recolte);
-            detail.setQuantite(productiviteArbre);
+        if (recolte.getDetailsRecolteArbres() != null) {
+            for (DetailRecolteArbre detail : recolte.getDetailsRecolteArbres()) {
+                // Find the Arbre entity by its ID from the repository.
+                Arbre arbre = arbreRepository.findById(detail.getArbre().getId())
+                        .orElseThrow(() -> new CustomNotFoundException("Arbre non trouvé avec l'ID : " + detail.getArbre().getId()));
 
-            totalQuantite += productiviteArbre;
+                // Calculate the productivity of the tree.
+                double productiviteArbre = arbre.calculerProductivite();
+
+                // Set the Arbre and Recolte objects to the DetailRecolteArbre object.
+                detail.setArbre(arbre);
+                detail.setRecolte(recolte); // assuming recolte is already instantiated
+                detail.setQuantite(productiviteArbre);
+
+                // Accumulate the total quantity.
+                totalQuantite += productiviteArbre;
+            }
+
+            // Now you can use totalQuantite if needed
         }
+
 
         recolte.setQuantite(totalQuantite);
 
@@ -89,14 +101,14 @@ public class RecolteServiceImpl implements RecolteService {
 
         // Mettre à jour les attributs de la récolte
         recolteExistante.setSaison(recolteDTO.saison());
-        recolteExistante.setDate(recolteDTO.dateRecolte());
+        recolteExistante.setDate(recolteDTO.date());
         recolteExistante.setChamp(champ);
 
         double totalQuantite = 0.0;
         recolteExistante.getDetailsRecolteArbres().clear();
 
         // Traiter chaque détail de récolte
-        for (DetailRecolteArbre detailDTO : recolteDTO.recolteDetails()) {
+        for (DetailRecolteArbre detailDTO : recolteDTO.detailsRecolteArbres()) {
             Long arbreId = detailDTO.getArbre().getId();
             Arbre arbre = arbreRepository.findById(arbreId)
                     .orElseThrow(() -> new ValidationException("Arbre avec l'ID " + arbreId + " n'existe pas."));

@@ -19,9 +19,9 @@ public record RecolteDTO(
 
         Long id,
         @NotNull(message = "La saison est obligatoire") Saison saison,
-        @NotNull(message = "La date de la récolte est obligatoire") LocalDate dateRecolte,
+        @NotNull(message = "La date de la récolte est obligatoire") LocalDate date,
         @NotNull(message = "L'ID du champ est obligatoire") Long champId,
-        @Valid List<@NotNull(message = "Les détails de récolte des arbres sont obligatoires") DetailRecolteArbre> recolteDetails) {
+        @Valid List<@NotNull(message = "Les détails de récolte des arbres sont obligatoires") DetailRecolteArbre> detailsRecolteArbres) {
 }
 
 
