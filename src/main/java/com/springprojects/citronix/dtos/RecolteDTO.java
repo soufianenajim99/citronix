@@ -24,15 +24,4 @@ public record RecolteDTO(
         @Valid List<@NotNull(message = "Les détails de récolte des arbres sont obligatoires") DetailRecolteArbre> recolteDetails) {
 }
 
-//@Builder
-//@Data
-//public class RecolteDTO {
-//    private UUID id;
-//    @NotBlank(message = "La saison de la récolte est obligatoire")
-//    private String saison;
-//    @NotNull(message = "La date de récolte est obligatoire")
-//    @PastOrPresent(message = "La date de récolte doit être dans le passé ou aujourd'hui")
-//    private LocalDate dateRecolte;
-//    private Set<DetailRecoltesDTO> recolteDetails;
-//    private Set<VenteDTO> venteDetails;
-//}
+
